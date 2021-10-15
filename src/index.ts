@@ -9,12 +9,11 @@ dotenv.config();
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 const URL = process.env.URL;
-const BASE_URL = process.env.BASE_URL;
 
-if (!username || !password || !URL || !BASE_URL)
-  throw Error(
-    'username, password, BASE_URL and URL are required in the .env file!'
-  );
+if (!username || !password || !URL)
+  throw Error('username, password and URL are required in the .env file!');
+
+const BASE_URL = URL.substring(0, URL.lastIndexOf('/')) + '/';
 
 const auth = { username, password };
 
@@ -109,6 +108,8 @@ async function downloadAllFiles() {
   await createFolder(downloadFolder);
 
   vorlesungsWochen.forEach(async ({ nr, units }) => {
+    if (nr !== 1) return;
+
     // creates Vorlesungs folder if it does not exist
     const path = `${downloadFolder}Vorlesungswoche ${nr}/`;
     await createFolder(path);
