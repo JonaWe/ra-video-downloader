@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "author": "Jona Wessendorf",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.11.0",
     "nodemon": "^2.0.13",
