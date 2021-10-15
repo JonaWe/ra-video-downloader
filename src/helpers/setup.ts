@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 export default function setup() {
   dotenv.config();
 
-  const username = process.env.USERNAME;
-  const password = process.env.PASSWORD;
+  const username = process.env.LOGIN_USERNAME;
+  const password = process.env.LOGIN_PASSWORD;
   const URL = process.env.URL;
 
   if (!username || !password || !URL)
