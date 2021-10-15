@@ -1,15 +1,20 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 import * as cheerio from 'cheerio';
+import { createWriteStream, promises } from 'fs';
+import sanitize from 'sanitize-filename';
 
 dotenv.config();
 
 const username = process.env.USERNAME;
 const password = process.env.PASSWORD;
 const URL = process.env.URL;
+const BASE_URL = process.env.BASE_URL;
 
-if (!username || !password || !URL)
-  throw Error('username, password and URL are required in the .env file!');
+if (!username || !password || !URL || !BASE_URL)
+  throw Error(
+    'username, password, BASE_URL and URL are required in the .env file!'
+  );
 
 const auth = { username, password };
 
@@ -75,7 +80,53 @@ async function getVorlesungsWochen(): Promise<VorlesungsWoche[]> {
   return vorlesungsWochen.slice(1);
 }
 
-getVorlesungsWochen();
+async function downloadFile(fileURL: string, savePath: string) {
+  axios
+    .get(fileURL, {
+      responseType: 'stream',
+      auth,
+    })
+    .then((response) => {
+      (response.data as any).pipe(createWriteStream(savePath));
+    });
+}
+
+async function createFolder(path: string) {
+  try {
+    await promises.access(path);
+  } catch {
+    try {
+      await promises.mkdir(path);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+async function downloadAllFiles() {
+  const downloadFolder = './downloads/';
+  const vorlesungsWochen = await getVorlesungsWochen();
+  await createFolder(downloadFolder);
+
+  vorlesungsWochen.forEach(async ({ nr, units }) => {
+    // creates Vorlesungs folder if it does not exist
+    const path = `${downloadFolder}Vorlesungswoche ${nr}/`;
+    await createFolder(path);
+
+    const vorlesungsWocheIndexString = `${nr < 10 ? '0' : ''}${nr}`;
+
+    units.forEach(async ({ name, mp4URL, pdfURL }, index) => {
+      const videoIndexString = `${index < 10 ? '0' : ''}${index}`;
+      const fileName = sanitize(name);
+      const videoFileName = `${path}${vorlesungsWocheIndexString}_${videoIndexString} - ${fileName}.mp4`;
+      const pdfFileName = `${path}${vorlesungsWocheIndexString}_${videoIndexString} - ${fileName}.pdf`;
+      await downloadFile(`${BASE_URL}${mp4URL}`, videoFileName);
+      await downloadFile(`${BASE_URL}${pdfURL}`, pdfFileName);
+    });
+  });
+}
+
+downloadAllFiles();
 
 class VorlesungsWoche {
   nr: number;
