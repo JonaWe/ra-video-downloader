@@ -11,7 +11,12 @@
   "author": "Jona Wessendorf",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^16.11.0",
     "nodemon": "^2.0.13",
     "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "axios": "^0.23.0",
+    "dotenv": "^10.0.0"
   }
 }
