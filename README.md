@@ -7,6 +7,15 @@ Dies ist ein Programm zum herunterladen der Videos und Folien für die Vorlesung
 
 Zum Ausführen des Projektes ist eine Installation von [git](https://git-scm.com/downloads) und [node](https://nodejs.org/en/download/) notwendig.
 
+Um zu überprüfen ob git und node installiert ist können die folgenden Befehle genutzt werden:
+```bash
+git --version
+```
+und
+```bash
+node --version
+```
+
 ### Klonen des Projektes
 
 ```bash
