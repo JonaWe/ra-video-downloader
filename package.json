@@ -1,0 +1,17 @@
+{
+  "name": "ra-downloader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "dev": "nodemon dist"
+  },
+  "keywords": [],
+  "author": "Jona Wessendorf",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.13",
+    "typescript": "^4.4.4"
+  }
+}
