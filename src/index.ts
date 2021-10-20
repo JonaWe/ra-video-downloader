@@ -22,7 +22,7 @@ async function main() {
     await createFolder(weekPath);
 
     units.forEach(async ({ name, mp4URL, pdfURL }, index) => {
-      const videoIndexString = createIndexString(index);
+      const videoIndexString = createIndexString(index + 1);
       const fileName = sanitize(name);
       const videoFileName = `${weekPath}${vorlesungsWocheIndexString}_${videoIndexString} - ${fileName} - Video.mp4`;
       const pdfFileName = `${weekPath}${vorlesungsWocheIndexString}_${videoIndexString} - ${fileName} - Folien.pdf`;
